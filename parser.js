@@ -6,7 +6,8 @@
       r.onload = function(e) { 
           //var contents = e.target.result;             
           var ct = r.result;
-          getChecks(ct);
+          let checks = getChecks(ct);
+          graphs(checks);
       }
       r.readAsText(f);
     } else { 
@@ -25,6 +26,7 @@ function getChecks(contents) {
   var createEntry = false;
   var checks = [];
 
+  var stepNr = 0;
   var incrementNr = 0;
   var averageF = 0;
   var timeAvgF = 0;
@@ -36,6 +38,15 @@ function getChecks(contents) {
   var corrDispN = 0;
 
   for(var i = 0; i < lines.length; i++) {
+
+    if (lines[i].includes("S T E P ")) {
+      var splitLine = lines[i].split(/[\s,]+/);
+      stepNr = splitLine[5];
+
+      //console.log("incrementNr: " + incrementNr);
+      //console.log(lines[i].split(/[\s,]+/));
+      //console.log("starts");
+    }
 
     if (lines[i].includes("STARTS. ATTEMPT NUMBER")) {
       insideIncrement = true;
@@ -90,7 +101,7 @@ function getChecks(contents) {
     }  
 
     if (createEntry) {
-      let check = new Check(incrementNr, averageF, timeAvgF, residualFV, residualFN, 
+      let check = new Check(stepNr, incrementNr, averageF, timeAvgF, residualFV, residualFN, 
                                   incrDispV, incrDispN,
                                   corrDispV, corrDispN);
       createEntry = false;
@@ -100,17 +111,17 @@ function getChecks(contents) {
 
 }
 
-//console.log(checks);
-graphs(checks);
-
+console.log(checks);
+return checks;
 }
 
 class Check {
 
-  constructor(incrementNr, averageF, timeAvgF, residualFV, residualFN, 
+  constructor(stepNr, incrementNr, averageF, timeAvgF, residualFV, residualFN, 
                                   incrDispV, incrDispN,
                                   corrDispV, corrDispN){
 
+  this.stepNr = stepNr;
   this.incrementNr = incrementNr;
   this.averageF = averageF;
   this.timeAvgF = timeAvgF;
@@ -136,7 +147,7 @@ for(var i = 0; i < checks.length; i++) {
 });
 
 }
-console.log(data);
+//console.log(data);
 
 new Chart("Residual", {
   type: "scatter",
