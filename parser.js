@@ -8,6 +8,7 @@
           var ct = r.result;
           let checks = getChecks(ct);
           graphs(checks);
+          countResidualIDs(checks)
       }
       r.readAsText(f);
     } else { 
@@ -111,7 +112,7 @@ function getChecks(contents) {
 
 }
 
-console.log(checks);
+//console.log(checks);
 return checks;
 }
 
@@ -133,6 +134,38 @@ class Check {
   this.corrDispN = corrDispN;
 
 }
+}
+
+//a, a, b, c, a, a, a, c.
+
+function countResidualIDs(checks){
+
+  residualIDs = [];
+
+for(var i = 0; i < checks.length; i++) {
+  var num = 0;
+  var skip = false;
+
+  for(var k = 0; k < residualIDs.length; k++){
+      if (checks[i].residualFN == residualIDs[k]['x']){ skip = true; break;}
+  }
+
+  if (skip){ skip = false; continue;}
+
+  for(var j = 0; j < checks.length; j++){
+      
+    if (checks[i].residualFN == checks[j].residualFN) { num++; }
+  }
+
+  residualIDs.push({
+      x: checks[i].residualFN,
+      y: num,
+      z: "test"
+      });
+//console.log(checks[i].residualFN);
+}
+console.log(residualIDs);
+
 }
 
 function graphs(checks) {
