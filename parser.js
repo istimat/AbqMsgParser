@@ -8,7 +8,7 @@
           var ct = r.result;
           let checks = getChecks(ct);
           graphs(checks);
-          countResidualIDs(checks)
+          //countResidualIDs(checks);
       }
       r.readAsText(f);
     } else { 
@@ -17,7 +17,6 @@
   }
 
 document.getElementById('fileinput').addEventListener('change', parseFile, false);
-
 
 
 function getChecks(contents) {
@@ -112,7 +111,6 @@ function getChecks(contents) {
 
 }
 
-//console.log(checks);
 return checks;
 }
 
@@ -136,18 +134,18 @@ class Check {
 }
 }
 
-//a, a, b, c, a, a, a, c.
 
 function countResidualIDs(checks){
 
-  residualIDs = [];
+  let labels = [];
+  let count = [];
 
 for(var i = 0; i < checks.length; i++) {
   var num = 0;
   var skip = false;
 
-  for(var k = 0; k < residualIDs.length; k++){
-      if (checks[i].residualFN == residualIDs[k]['x']){ skip = true; break;}
+  for(var k = 0; k < labels.length; k++){
+      if (checks[i].residualFN == labels[k]){ skip = true; break;}
   }
 
   if (skip){ skip = false; continue;}
@@ -157,38 +155,131 @@ for(var i = 0; i < checks.length; i++) {
     if (checks[i].residualFN == checks[j].residualFN) { num++; }
   }
 
-  residualIDs.push({
-      x: checks[i].residualFN,
-      y: num,
-      z: "test"
-      });
-//console.log(checks[i].residualFN);
-}
-console.log(residualIDs);
+  labels.push(checks[i].residualFN);
+  count.push(num);
 
 }
+
+var retrieve = sortDescending(labels, count);
+sortedlabels = retrieve[0]; 
+sortedcount = retrieve[1];
+
+const residualIDs = ({
+      labels: sortedlabels,
+      datasets: [{
+        label: 'Residual Force Nodes',
+        data: sortedcount
+        }]
+      });
+console.log(residualIDs);
+    return residualIDs;
+}
+
+function countCorrDispIDs(checks){
+
+  let labels = [];
+  let count = [];
+
+for(var i = 0; i < checks.length; i++) {
+  var num = 0;
+  var skip = false;
+
+  for(var k = 0; k < labels.length; k++){
+      if (checks[i].corrDispN == labels[k]){ skip = true; break;}
+  }
+
+  if (skip){ skip = false; continue;}
+
+  for(var j = 0; j < checks.length; j++){
+      
+    if (checks[i].corrDispN == checks[j].corrDispN) { num++; }
+  }
+
+  labels.push(checks[i].corrDispN);
+  count.push(num);
+
+}
+
+
+var retrieve = sortDescending(labels, count);
+sortedlabels = retrieve[0]; 
+sortedcount = retrieve[1];
+
+const corrDispNIDs = ({
+      labels: sortedlabels,
+      datasets: [{
+        label: 'Largest Correction to Displacement Node IDs',
+        data: sortedcount
+        }]
+      });
+
+console.log(corrDispNIDs);
+    return corrDispNIDs;
+}
+
+function sortDescending(labels, counts){
+  var max = 0;
+  sortedLabels = [];
+  sortedCount = [];
+  k = 0;
+  var location = 0;
+  if (labels.length != counts.length) {
+    console.log("Error! Data set unsymmetrical!");
+  }
+
+  for(var i = 0; i < counts.length; i++){
+
+    for(var j = 0; j < counts.length; j++){
+      if (counts[j] > max && counts[j] != 0) {
+        max = counts[j];
+        location = j;
+      }
+    }
+    counts[location] = 0;
+    sortedCount[k] = max;
+    sortedLabels[k] = labels[location];
+    k++;
+    max = 0;
+    
+  }
+
+  console.log(sortedLabels);
+  console.log(sortedCount);
+  
+  return [
+     sortedLabels,
+     sortedCount,
+    ];
+}
+
+function corrDispData(checks) {
+
+  var data = [];
+
+  for(var i = 0; i < checks.length; i++) {
+
+    data.push({
+      x:   checks[i].incrementNr,
+      y: checks[i].corrDispV
+      });
+
+  
+
+  }
+  return data;
+  }
+
 
 function graphs(checks) {
 
-var data = [];
-
-for(var i = 0; i < checks.length; i++) {
-
-  data.push({
-    x:   checks[i].incrementNr,
-    y: checks[i].corrDispV
-});
-
-}
-//console.log(data);
-
-new Chart("Residual", {
+  
+new Chart("DispCorr", {
   type: "scatter",
   data: {
     datasets: [{
       pointRadius: 4,
       pointBackgroundColor: "rgb(0,0,255)",
-      data: data
+      data: corrDispData(checks)
     }]
   },
   options: {
@@ -200,5 +291,30 @@ new Chart("Residual", {
   }
 });
 
+//console.log(countResidualIDs(checks));
+
+new Chart("ResidualIDs", {
+  type: "bar",
+  data: countResidualIDs(checks),
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+          }
+    }
+  },
+});
+
+new Chart("corrDispIDs", {
+  type: "bar",
+  data: countCorrDispIDs(checks),
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+          }
+    }
+  },
+});
 
 }
