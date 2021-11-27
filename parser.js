@@ -58,6 +58,30 @@ function getChecks(contents) {
       //console.log("starts");
     }
 
+    if (insideIncrement == true && lines[i].includes("MAX. PENETRATION ERROR")){
+
+      var splitLine = lines[i].split(/[\s,]+/);
+      penetrationE = splitLine[4];
+      penetrationNodeID = splitLine[7];
+      contactNameP = lines[i+1].replace(/(\r\n|\n|\r|\s|\(|\))/gm,"");;
+      //console.log("contactName: " + contactName);
+      //console.log("penetrationE: " + penetrationE);
+      //console.log("penetrationNodeID: " + penetrationNodeID);
+      
+    }
+
+    if (insideIncrement == true && lines[i].includes("MAX. CONTACT FORCE ERROR")){
+
+      var splitLine = lines[i].split(/[\s,]+/);
+      contactForceE = splitLine[4];
+      contactForceNodeID = splitLine[7];
+      contactNameF = lines[i+1].replace(/(\r\n|\n|\r|\s|\(|\))/gm,"");;
+      //console.log("contactName: " + contactName);
+      //console.log("penetrationE: " + penetrationE);
+      //console.log("penetrationNodeID: " + penetrationNodeID);
+      
+    }
+
     if (insideIncrement == true && lines[i].includes("AVERAGE FORCE")){
 
       var splitLine = lines[i].split(/[\s,]+/);
@@ -101,9 +125,13 @@ function getChecks(contents) {
     }  
 
     if (createEntry) {
-      let check = new Check(stepNr, incrementNr, averageF, timeAvgF, residualFV, residualFN, 
-                                  incrDispV, incrDispN,
-                                  corrDispV, corrDispN);
+      let check = new Check(stepNr, incrementNr, 
+              penetrationE, penetrationNodeID, contactNameP, 
+              contactForceE, contactForceNodeID, contactNameF,
+              averageF, timeAvgF, 
+              residualFV, residualFN, 
+              incrDispV, incrDispN,
+              corrDispV, corrDispN);
       createEntry = false;
       checks.push(check);
 
@@ -116,12 +144,22 @@ return checks;
 
 class Check {
 
-  constructor(stepNr, incrementNr, averageF, timeAvgF, residualFV, residualFN, 
-                                  incrDispV, incrDispN,
-                                  corrDispV, corrDispN){
+  constructor(stepNr, incrementNr, 
+              penetrationE, penetrationNodeID, contactNameP, 
+              contactForceE, contactForceNodeID, contactNameF,
+              averageF, timeAvgF, 
+              residualFV, residualFN, 
+              incrDispV, incrDispN,
+              corrDispV, corrDispN){
 
   this.stepNr = stepNr;
   this.incrementNr = incrementNr;
+  this.penetrationE = penetrationE;
+  this.penetrationNodeID = penetrationNodeID;
+  this.contactNameP = contactNameP;
+  this.contactForceE = contactForceE;
+  this.contactForceNodeID = contactForceNodeID;
+  this.contactNameF = contactNameF;
   this.averageF = averageF;
   this.timeAvgF = timeAvgF;
   this.residualFV = residualFV;
@@ -135,87 +173,47 @@ class Check {
 }
 
 
-function countResidualIDs(checks){
+function countNodeIDs(property, label, numberOfResults, checks){
 
   let labels = [];
   let count = [];
 
-for(var i = 0; i < checks.length; i++) {
-  var num = 0;
-  var skip = false;
+  for(var i = 0; i < checks.length; i++) {
+    var num = 0;
+    var skip = false;
 
-  for(var k = 0; k < labels.length; k++){
-      if (checks[i].residualFN == labels[k]){ skip = true; break;}
-  }
+    for(var k = 0; k < labels.length; k++){
+      if (checks[i][property] == labels[k]){ skip = true; break;}
+    }
 
-  if (skip){ skip = false; continue;}
+    if (skip){ skip = false; continue;}
 
-  for(var j = 0; j < checks.length; j++){
+    for(var j = 0; j < checks.length; j++){
       
-    if (checks[i].residualFN == checks[j].residualFN) { num++; }
+      if (checks[i][property] == checks[j][property]) { num++; }
+    }
+
+    labels.push(checks[i][property]);
+    count.push(num);
+
   }
 
-  labels.push(checks[i].residualFN);
-  count.push(num);
+  var retrieve = sortDescending(labels, count);
+  sortedlabels = retrieve[0]; 
+  sortedcount = retrieve[1];
 
-}
-
-var retrieve = sortDescending(labels, count);
-sortedlabels = retrieve[0]; 
-sortedcount = retrieve[1];
-
-const residualIDs = ({
-      labels: sortedlabels,
+  const data = ({
+      labels: sortedlabels.slice(0,numberOfResults),
       datasets: [{
-        label: 'Residual Force Nodes',
-        data: sortedcount
+        label: label,
+        data: sortedcount.slice(0,numberOfResults)
         }]
       });
-console.log(residualIDs);
-    return residualIDs;
-}
-
-function countCorrDispIDs(checks){
-
-  let labels = [];
-  let count = [];
-
-for(var i = 0; i < checks.length; i++) {
-  var num = 0;
-  var skip = false;
-
-  for(var k = 0; k < labels.length; k++){
-      if (checks[i].corrDispN == labels[k]){ skip = true; break;}
-  }
-
-  if (skip){ skip = false; continue;}
-
-  for(var j = 0; j < checks.length; j++){
-      
-    if (checks[i].corrDispN == checks[j].corrDispN) { num++; }
-  }
-
-  labels.push(checks[i].corrDispN);
-  count.push(num);
-
+  console.log(data);
+  return data;
 }
 
 
-var retrieve = sortDescending(labels, count);
-sortedlabels = retrieve[0]; 
-sortedcount = retrieve[1];
-
-const corrDispNIDs = ({
-      labels: sortedlabels,
-      datasets: [{
-        label: 'Largest Correction to Displacement Node IDs',
-        data: sortedcount
-        }]
-      });
-
-console.log(corrDispNIDs);
-    return corrDispNIDs;
-}
 
 function sortDescending(labels, counts){
   var max = 0;
@@ -243,8 +241,8 @@ function sortDescending(labels, counts){
     
   }
 
-  console.log(sortedLabels);
-  console.log(sortedCount);
+  //console.log(sortedLabels);
+  //console.log(sortedCount);
   
   return [
      sortedLabels,
@@ -270,51 +268,123 @@ function corrDispData(checks) {
   }
 
 
+
+
 function graphs(checks) {
 
-  
-new Chart("DispCorr", {
-  type: "scatter",
-  data: {
-    datasets: [{
-      pointRadius: 4,
-      pointBackgroundColor: "rgb(0,0,255)",
-      data: corrDispData(checks)
-    }]
-  },
-  options: {
-    legend: {display: false},
-    //scales: {
-    //  xAxes: [{ticks: {min: 40, max:160}}],
-    //  yAxes: [{ticks: {min: 6, max:16}}],
-    //}
-  }
-});
+    chartData_contactNamePChart = countNodeIDs('contactNameP', 'Contact Penetration Frequency', 10, checks);
 
-//console.log(countResidualIDs(checks));
+    contactNamePChart = new Chart("contactNameP", {
+    type: "bar",
+    data: chartData_contactNamePChart,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+            }
+      },
+      onClick(e) {
+        const activePoints = contactNamePChart.getElementsAtEventForMode(e, 'nearest', {
+        intersect: true
+      }, false)
+      const [{
+        _index
+      }] = activePoints;
+      console.log(chartData_contactNamePChart.labels[_index]);
+      navigator.clipboard.writeText(chartData_contactNamePChart.labels[_index]);
+      }
+    },
+  });
 
-new Chart("ResidualIDs", {
-  type: "bar",
-  data: countResidualIDs(checks),
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
-          }
+    chartData_contactNameFChart = countNodeIDs('contactNameF', 'Contact Penetration Frequency', 10, checks);
+
+    contactNameFChart = new Chart("contactNameF", {
+    type: "bar",
+    data: chartData_contactNameFChart,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+            }
+      },
+      onClick(e) {
+        const activePoints = contactNameFChart.getElementsAtEventForMode(e, 'nearest', {
+        intersect: true
+      }, false)
+      const [{
+        _index
+      }] = activePoints;
+      console.log(chartData_contactNameFChart.labels[_index]);
+      navigator.clipboard.writeText(chartData_contactNameFChart.labels[_index]);
+      }
+    },
+  });
+
+
+  new Chart("DispCorr", {
+    type: "scatter",
+    data: {
+      datasets: [{
+        pointRadius: 4,
+        pointBackgroundColor: "rgb(0,0,255)",
+        data: corrDispData(checks)
+      }]
+    },
+    options: {
+      legend: {display: false},
+      //scales: {
+      //  xAxes: [{ticks: {min: 40, max:160}}],
+      //  yAxes: [{ticks: {min: 6, max:16}}],
+      //}
     }
-  },
-});
+  });
 
-new Chart("corrDispIDs", {
-  type: "bar",
-  data: countCorrDispIDs(checks),
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
-          }
-    }
-  },
-});
+  chartData_ResidualIDsChart = countNodeIDs('residualFN', 'Residual Force Node Frequency', 10, checks);
+
+  ResidualIDsChart = new Chart("residualFN", {
+    type: "bar",
+    data: chartData_ResidualIDsChart,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+            }
+      },
+      onClick(e) {
+        const activePoints = ResidualIDsChart.getElementsAtEventForMode(e, 'nearest', {
+        intersect: true
+      }, false)
+      const [{
+        _index
+      }] = activePoints;
+      console.log(chartData_ResidualIDsChart.labels[_index]);
+      navigator.clipboard.writeText(chartData_ResidualIDsChart.labels[_index]);
+      }
+    },
+  });
+
+  chartData_corrDispIDsChart = countNodeIDs('corrDispN', 'Largest Correction to Displacement Node IDs', 10, checks);
+
+  corrDispIDsChart = new Chart("corrDispN", {
+    type: "bar",
+    data: chartData_corrDispIDsChart,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+            }
+      },
+      onClick(e) {
+        const activePoints = corrDispIDsChart.getElementsAtEventForMode(e, 'nearest', {
+        intersect: true
+      }, false)
+      const [{
+        _index
+      }] = activePoints;
+      console.log(chartData_corrDispIDsChart.labels[_index]);
+      navigator.clipboard.writeText(chartData_corrDispIDsChart.labels[_index]);
+      }
+    },
+  });
 
 }
