@@ -8,7 +8,11 @@
           var ct = r.result;
           let checks = getChecks(ct);
           graphs(checks);
-          //countResidualIDs(checks);
+          document.getElementById("contactNameP_description").innerHTML = "Max Contact Penetration Error:";
+          document.getElementById("contactNameF_description").innerHTML = "Max Contact Force Error:";
+          document.getElementById("DispCorr_description").innerHTML = "Largest correction to displacement for each convergence check:";
+          document.getElementById("residualFN_description").innerHTML = "Largest residual force frequency:";
+          document.getElementById("corrDispN_description").innerHTML = "Largest correction to displacement frequency:";
       }
       r.readAsText(f);
     } else { 
@@ -28,6 +32,12 @@ function getChecks(contents) {
 
   var stepNr = 0;
   var incrementNr = 0;
+  var penetrationE = 0;
+  var penetrationNodeID = 0;
+  var contactNameP = 0;
+  var contactForceE = 0;
+  var contactForceNodeID = 0;
+  var contactNameF = 0;
   var averageF = 0;
   var timeAvgF = 0;
   var residualFV = 0;
