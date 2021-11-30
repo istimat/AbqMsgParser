@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <h1>Abaqus message file analyzer</h1>
 <p>Select a *.msg file to get debug information:</p>
@@ -7,17 +8,18 @@
 <script
 src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 </script>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <p id="contactNameP_description"></p>
-<canvas id="contactNameP" style="width:100%;max-width:1200px"></canvas>
+<canvas class="chart" id="contactNameP" ></canvas>
 <p id="contactNameF_description"></p>
-<canvas id="contactNameF" style="width:100%;max-width:1200px"></canvas>
+<canvas id="contactNameF" class="chart"></canvas>
 <p id="DispCorr_description"></p>
-<canvas id="DispCorr" style="width:100%;max-width:1200px"></canvas>
+<canvas id="DispCorr" class="chart"></canvas>
 <p id="residualFN_description"></p>
-<canvas id="residualFN" style="width:100%;max-width:1200px"></canvas>
+<canvas id="residualFN" class="chart"></canvas>
 <p id="corrDispN_description"></p>
-<canvas id="corrDispN" style="width:100%;max-width:1200px"></canvas>
+<canvas id="corrDispN" class="chart"></canvas>
 </body>
 </html>

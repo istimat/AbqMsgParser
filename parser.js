@@ -216,12 +216,14 @@ function countNodeIDs(property, label, numberOfResults, checks){
       labels: sortedlabels.slice(0,numberOfResults),
       datasets: [{
         label: label,
-        data: sortedcount.slice(0,numberOfResults)
+        data: sortedcount.slice(0,numberOfResults),
+        backgroundColor: 'rgba(68, 118, 255, 0.534)',
         }]
       });
   console.log(data);
   return data;
 }
+
 
 
 
