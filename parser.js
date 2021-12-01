@@ -333,6 +333,11 @@ function createBarChart(data,description){
         const activePoints = chart.getElementsAtEventForMode(e, 'nearest', {
         intersect: true
       }, false)
+      if (activePoints.length === 0) {
+        let allElements = data.labels.join();
+        console.log(allElements);
+        navigator.clipboard.writeText(allElements);
+      }
       const [{
         _index
       }] = activePoints;
