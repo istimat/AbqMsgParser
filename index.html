@@ -3,8 +3,6 @@
 <h1>Abaqus message file analyzer</h1>
 <p>Select a *.msg file to get debug information:</p>
 <head>
-<input type="file" id="fileinput" />
-<script src="parser.js"></script>
 <script
 src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 </script>
@@ -13,15 +11,17 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 <script src="notifications.js"></script>
 </head>
 <body>
-<p id="contactNameP_description"></p>
-<canvas class="chart" id="contactNameP" ></canvas>
-<p id="contactNameF_description"></p>
+<input type="file" id="fileinput" style="width: 1000px"/>
+<script src="parser.js"></script>
+<p id="contactNameP_description" class="descriptions"></p>
+<canvas  id="contactNameP" class="chart"></canvas>
+<p id="contactNameF_description" class="descriptions"></p>
 <canvas id="contactNameF" class="chart"></canvas>
-<p id="DispCorr_description"></p>
+<p id="DispCorr_description" class="descriptions"></p>
 <canvas id="DispCorr" class="chart"></canvas>
-<p id="residualFN_description"></p>
+<p id="residualFN_description" class="descriptions"></p>
 <canvas id="residualFN" class="chart"></canvas>
-<p id="corrDispN_description"></p>
+<p id="corrDispN_description" class="descriptions"></p>
 <canvas id="corrDispN" class="chart"></canvas>
 </body>
 </html>
