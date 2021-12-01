@@ -285,6 +285,8 @@ function corrDispData(checks) {
 
 function graphs(checks) {
 
+  chartsArray = [];
+
   chartData_ResidualIDsChart = countNodeIDs('residualFN', 'Residual Force Node Frequency', 10, checks);
   createBarChart(chartData_ResidualIDsChart,'residualFN');
   chartData_contactNameFChart = countNodeIDs('contactNameF', 'Contact Force Frequency', 10, checks);
@@ -318,7 +320,7 @@ function graphs(checks) {
 
 function createBarChart(data,description){
 
-  ResidualIDsChart = new Chart(description, {
+  let chart = new Chart(description, {
     type: "bar",
     data: data,
     options: {
@@ -328,7 +330,7 @@ function createBarChart(data,description){
             }
       },
       onClick(e) {
-        const activePoints = ResidualIDsChart.getElementsAtEventForMode(e, 'nearest', {
+        const activePoints = chart.getElementsAtEventForMode(e, 'nearest', {
         intersect: true
       }, false)
       const [{
