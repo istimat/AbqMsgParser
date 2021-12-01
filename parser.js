@@ -282,55 +282,18 @@ function corrDispData(checks) {
 
 
 
+
 function graphs(checks) {
 
-    chartData_contactNamePChart = countNodeIDs('contactNameP', 'Contact Penetration Frequency', 10, checks);
+  chartData_ResidualIDsChart = countNodeIDs('residualFN', 'Residual Force Node Frequency', 10, checks);
+  createBarChart(chartData_ResidualIDsChart,'residualFN');
+  chartData_contactNameFChart = countNodeIDs('contactNameF', 'Contact Force Frequency', 10, checks);
+  createBarChart(chartData_contactNameFChart,'contactNameF');
+  chartData_contactNameFChart = countNodeIDs('contactNameP', 'Contact Penetration Frequency', 10, checks);
+  createBarChart(chartData_contactNameFChart,'contactNameP');
+  chartData_contactNameFChart = countNodeIDs('corrDispN', 'Largest Correction to Displacement Node IDs', 10, checks);
+  createBarChart(chartData_contactNameFChart,'corrDispN');
 
-    contactNamePChart = new Chart("contactNameP", {
-    type: "bar",
-    data: chartData_contactNamePChart,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-            }
-      },
-      onClick(e) {
-        const activePoints = contactNamePChart.getElementsAtEventForMode(e, 'nearest', {
-        intersect: true
-      }, false)
-      const [{
-        _index
-      }] = activePoints;
-      console.log(chartData_contactNamePChart.labels[_index]);
-      navigator.clipboard.writeText(chartData_contactNamePChart.labels[_index]);
-      }
-    },
-  });
-
-    chartData_contactNameFChart = countNodeIDs('contactNameF', 'Contact Penetration Frequency', 10, checks);
-
-    contactNameFChart = new Chart("contactNameF", {
-    type: "bar",
-    data: chartData_contactNameFChart,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-            }
-      },
-      onClick(e) {
-        const activePoints = contactNameFChart.getElementsAtEventForMode(e, 'nearest', {
-        intersect: true
-      }, false)
-      const [{
-        _index
-      }] = activePoints;
-      console.log(chartData_contactNameFChart.labels[_index]);
-      navigator.clipboard.writeText(chartData_contactNameFChart.labels[_index]);
-      }
-    },
-  });
 
 
   new Chart("DispCorr", {
@@ -351,11 +314,13 @@ function graphs(checks) {
     }
   });
 
-  chartData_ResidualIDsChart = countNodeIDs('residualFN', 'Residual Force Node Frequency', 10, checks);
+}
 
-  ResidualIDsChart = new Chart("residualFN", {
+function createBarChart(data,description){
+
+  ResidualIDsChart = new Chart(description, {
     type: "bar",
-    data: chartData_ResidualIDsChart,
+    data: data,
     options: {
       scales: {
         y: {
@@ -369,34 +334,9 @@ function graphs(checks) {
       const [{
         _index
       }] = activePoints;
-      console.log(chartData_ResidualIDsChart.labels[_index]);
-      navigator.clipboard.writeText(chartData_ResidualIDsChart.labels[_index]);
+      console.log(data.labels[_index]);
+      navigator.clipboard.writeText(data.labels[_index]);
       }
     },
   });
-
-  chartData_corrDispIDsChart = countNodeIDs('corrDispN', 'Largest Correction to Displacement Node IDs', 10, checks);
-
-  corrDispIDsChart = new Chart("corrDispN", {
-    type: "bar",
-    data: chartData_corrDispIDsChart,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-            }
-      },
-      onClick(e) {
-        const activePoints = corrDispIDsChart.getElementsAtEventForMode(e, 'nearest', {
-        intersect: true
-      }, false)
-      const [{
-        _index
-      }] = activePoints;
-      console.log(chartData_corrDispIDsChart.labels[_index]);
-      navigator.clipboard.writeText(chartData_corrDispIDsChart.labels[_index]);
-      }
-    },
-  });
-
 }
