@@ -7,12 +7,14 @@
           //var contents = e.target.result;             
           var ct = r.result;
           let checks = getChecks(ct);
+          successNotification = initializeNotifications();
           graphs(checks);
           document.getElementById("contactNameP_description").innerHTML = "Max Contact Penetration Error:";
           document.getElementById("contactNameF_description").innerHTML = "Max Contact Force Error:";
           document.getElementById("DispCorr_description").innerHTML = "Largest correction to displacement for each convergence check:";
           document.getElementById("residualFN_description").innerHTML = "Largest residual force frequency:";
           document.getElementById("corrDispN_description").innerHTML = "Largest correction to displacement frequency:";
+
       }
       r.readAsText(f);
     } else { 
@@ -22,6 +24,13 @@
 
 document.getElementById('fileinput').addEventListener('change', parseFile, false);
 
+function initializeNotifications(){
+  const successNotification = window.createNotification({
+    theme: 'success',
+    showDuration: 2000
+  });
+  return successNotification;
+}
 
 function getChecks(contents) {
   
@@ -337,13 +346,20 @@ function createBarChart(data,description){
         let allElements = data.labels.join();
         console.log(allElements);
         navigator.clipboard.writeText(allElements);
+        successNotification({ 
+          message: 'All labels added to clipboard!' 
+        });
       }
       const [{
         _index
       }] = activePoints;
       console.log(data.labels[_index]);
       navigator.clipboard.writeText(data.labels[_index]);
+      successNotification({ 
+        message: data.labels[_index]+' added to clipboard!' 
+      });
       }
     },
   });
 }
+
