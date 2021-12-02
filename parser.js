@@ -11,7 +11,7 @@
           let checks = getChecks(ct);
           var singularityObjects = getSingularities(ct);
 
-          if (singularityObjects != null) {
+          if (singularityObjects['node'] != null) {
             document.getElementById("singularityHidden").style.display = "block";
             loadTableData(singularityObjects, 'singularities');
           }
