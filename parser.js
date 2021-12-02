@@ -1,4 +1,4 @@
-
+var singularitiesList = '';
   
   function parseFile(evt) {
     var f = evt.target.files[0];   
@@ -14,6 +14,9 @@
           if (singularityObjects[0] != undefined) {
             document.getElementById("singularityHidden").style.display = "block";
             loadTableData(singularityObjects, 'singularities');
+            for(var i = 0; i < singularityObjects.length; i++) {
+              singularitiesList = singularitiesList + singularityObjects[i].nodes + ', ';
+            }
           }
 
           successNotification = initializeNotifications();
@@ -35,7 +38,11 @@ document.getElementById('fileinput').addEventListener('change', parseFile, false
 
 
 function singularitiesToCB(){
-  console.log(singularitiesList);
+  //console.log(singularitiesList);
+  navigator.clipboard.writeText(singularitiesList);
+        successNotification({ 
+          message: 'All singularities added to clipboard!' 
+        });
 
 }
 
