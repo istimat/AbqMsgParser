@@ -1,3 +1,17 @@
+.table, th, td{
+    border: 1px solid rgb(221, 214, 214);
+    text-align: center;
+}
+
+tr:nth-child(even) {background-color: #e2e4fd;}
+tr:hover {background-color: rgb(148, 169, 240);}
+
+
+table {
+    border-collapse: collapse;
+    width: 30%;
+}
+
 body {
     background-color: rgb(248, 247, 247);
     font-family: Helvetica, Arial, sans-serif;

@@ -13,6 +13,22 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 <body>
 <input type="file" id="fileinput" style="width: 1000px"/>
 <script src="parser.js"></script>
+<div id="singularityHidden" style="display:none" >
+    <p>
+        Singularities have been found in the message file! The following nodes are probably unconstrained or are part of an unconstrained component:
+    </p>
+    <button onclick="singularitiesToCB()">Add list to clipboard</button> 
+    <table class="table">
+        <thead>
+            <tr>
+            <th>Node</th>
+            <th>DOF</th>
+            <th>Ratio</th>
+            </tr>
+        </thead>
+    <tbody id="singularities"></tbody>
+    </table>
+</div>
 <p id="contactNameP_description" class="descriptions"></p>
 <canvas  id="contactNameP" class="chart"></canvas>
 <p id="contactNameF_description" class="descriptions"></p>

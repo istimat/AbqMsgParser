@@ -1,4 +1,4 @@
-
+var singularitiesList = '';
   
   function parseFile(evt) {
     var f = evt.target.files[0];   
@@ -9,6 +9,16 @@
           //var contents = e.target.result;             
           var ct = r.result;
           let checks = getChecks(ct);
+          var singularityObjects = getSingularities(ct);
+          
+          if (singularityObjects[0] != undefined) {
+            document.getElementById("singularityHidden").style.display = "block";
+            loadTableData(singularityObjects, 'singularities');
+            for(var i = 0; i < singularityObjects.length; i++) {
+              singularitiesList = singularitiesList + singularityObjects[i].nodes + ', ';
+            }
+          }
+
           successNotification = initializeNotifications();
           graphs(checks);
           document.getElementById("contactNameP_description").innerHTML = "Max Contact Penetration Error:";
@@ -26,12 +36,62 @@
 
 document.getElementById('fileinput').addEventListener('change', parseFile, false);
 
+
+function singularitiesToCB(){
+  //console.log(singularitiesList);
+  navigator.clipboard.writeText(singularitiesList);
+        successNotification({ 
+          message: 'All singularities added to clipboard!' 
+        });
+
+}
+
 function initializeNotifications(){
   const successNotification = window.createNotification({
     theme: 'success',
     showDuration: 2000
   });
   return successNotification;
+}
+
+function getSingularities(contents) {
+  let lines = contents.split(/[\r\n]+/g);
+
+  let node = 0;
+  let dof = 0;
+  let ratio = 0;
+  let createEntry = false;
+
+  let singularities = [];
+
+  for(var i = 0; i < lines.length; i++) {
+    
+    if (lines[i].includes("SOLVER PROBLEM. NUMERICAL SINGULARITY WHEN PROCESSING NODE")) {
+      var splitLine = lines[i+1].split(/[\s,]+/);
+      node = splitLine[1];
+      dof = splitLine[3];
+      ratio = splitLine[6];
+      createEntry = true;
+      //console.log("node" + node);
+      //console.log("dof" + dof);
+      //console.log("ratio" + ratio);
+
+    }
+    if (createEntry) {
+      const singularity = ({
+        nodes: node,
+        dofs: dof,
+        ratios: ratio,
+        });
+      createEntry = false;
+      singularities.push(singularity);
+  
+    }
+  
+  }
+  console.log(singularities);
+  return singularities;
+  
 }
 
 function getChecks(contents) {
@@ -231,7 +291,7 @@ function countNodeIDs(property, label, numberOfResults, checks){
         backgroundColor: 'rgba(68, 118, 255, 0.534)',
         }]
       });
-  console.log(data);
+  //console.log(data);
   return data;
 }
 
@@ -346,7 +406,7 @@ function createBarChart(data,description){
       }, false)
       if (activePoints.length === 0) {
         let allElements = data.labels.join();
-        console.log(allElements);
+        //console.log(allElements);
         navigator.clipboard.writeText(allElements);
         successNotification({ 
           message: 'All labels added to clipboard!' 
@@ -355,7 +415,7 @@ function createBarChart(data,description){
       const [{
         _index
       }] = activePoints;
-      console.log(data.labels[_index]);
+      //console.log(data.labels[_index]);
       navigator.clipboard.writeText(data.labels[_index]);
       successNotification({ 
         message: data.labels[_index]+' added to clipboard!' 
@@ -365,3 +425,18 @@ function createBarChart(data,description){
   });
 }
 
+function loadTableData(arrayOfObjects, tableBodyID) {
+  const table = document.getElementById(tableBodyID);
+  
+  arrayOfObjects.forEach( arrayOfObjects => {
+    let row = table.insertRow();
+    let cellCount = 0;
+    for (const property in arrayOfObjects) {
+        let cell = row.insertCell(cellCount);
+        cell.innerHTML = String(arrayOfObjects[property]);
+        cellCount = cellCount+1;
+    }
+
+
+  });
+}
