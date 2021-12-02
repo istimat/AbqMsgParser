@@ -10,8 +10,8 @@
           var ct = r.result;
           let checks = getChecks(ct);
           var singularityObjects = getSingularities(ct);
-
-          if (singularityObjects['node'] != null) {
+          
+          if (singularityObjects[0] != undefined) {
             document.getElementById("singularityHidden").style.display = "block";
             loadTableData(singularityObjects, 'singularities');
           }
