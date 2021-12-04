@@ -400,16 +400,16 @@ function createBarChart(data,description){
           beginAtZero: true,
           scaleLabel: {
             display: true,
-            labelString: 'Data IDs'
-            //TODO: different font compared to labels;
+            labelString: 'Data IDs',
+            fontStyle: 'bold'
           },
         }],
         yAxes: [{
           beginAtZero: true,
           scaleLabel: {
             display: true,
-            labelString: 'Number of occurences in *.msg file'
-            //TODO: different font compared to labels;
+            labelString: 'Number of occurences in *.msg file',
+            fontStyle: 'bold'
           }
         }]
       },
