@@ -255,42 +255,42 @@ class Check {
 
 
 function countNodeIDs(property, label, numberOfResults, checks){
-
+  
   let labels = [];
   let count = [];
-
+  
   for(var i = 0; i < checks.length; i++) {
     var num = 0;
     var skip = false;
-
+    
     for(var k = 0; k < labels.length; k++){
       if (checks[i][property] == labels[k]){ skip = true; break;}
     }
-
+    
     if (skip){ skip = false; continue;}
-
+    
     for(var j = 0; j < checks.length; j++){
       
       if (checks[i][property] == checks[j][property]) { num++; }
     }
-
+    
     labels.push(checks[i][property]);
     count.push(num);
-
+    
   }
-
+  
   var retrieve = sortDescending(labels, count);
   sortedlabels = retrieve[0]; 
   sortedcount = retrieve[1];
-
+  
   const data = ({
-      labels: sortedlabels.slice(0,numberOfResults),
-      datasets: [{
-        label: label,
-        data: sortedcount.slice(0,numberOfResults),
-        backgroundColor: 'rgba(68, 118, 255, 0.534)',
-        }]
-      });
+    labels: sortedlabels.slice(0,numberOfResults),
+    datasets: [{
+      label: label,
+      data: sortedcount.slice(0,numberOfResults),
+      backgroundColor: 'rgba(68, 118, 255, 0.534)',
+    }]
+  });
   //console.log(data);
   return data;
 }
@@ -390,36 +390,49 @@ function graphs(checks) {
 }
 
 function createBarChart(data,description){
-
+  
   let chart = new Chart(description, {
     type: "bar",
     data: data,
     options: {
       scales: {
-        y: {
-          beginAtZero: true
-            }
+        xAxes: [{
+          beginAtZero: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Data IDs',
+            fontStyle: 'bold'
+          },
+        }],
+        yAxes: [{
+          beginAtZero: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Number of occurences in *.msg file',
+            fontStyle: 'bold'
+          }
+        }]
       },
       onClick(e) {
         const activePoints = chart.getElementsAtEventForMode(e, 'nearest', {
-        intersect: true
-      }, false)
-      if (activePoints.length === 0) {
-        let allElements = data.labels.join();
-        //console.log(allElements);
-        navigator.clipboard.writeText(allElements);
+          intersect: true
+        }, false)
+        if (activePoints.length === 0) {
+          let allElements = data.labels.join();
+          //console.log(allElements);
+          navigator.clipboard.writeText(allElements);
+          successNotification({ 
+            message: 'All labels added to clipboard!' 
+          });
+        }
+        const [{
+          _index
+        }] = activePoints;
+        //console.log(data.labels[_index]);
+        navigator.clipboard.writeText(data.labels[_index]);
         successNotification({ 
-          message: 'All labels added to clipboard!' 
+          message: data.labels[_index]+' added to clipboard!' 
         });
-      }
-      const [{
-        _index
-      }] = activePoints;
-      //console.log(data.labels[_index]);
-      navigator.clipboard.writeText(data.labels[_index]);
-      successNotification({ 
-        message: data.labels[_index]+' added to clipboard!' 
-      });
       }
     },
   });
