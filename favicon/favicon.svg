@@ -23,9 +23,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1163316"
-     inkscape:cx="212.66146"
-     inkscape:cy="430.64009"
+     inkscape:zoom="1.3139059"
+     inkscape:cx="306.96026"
+     inkscape:cy="539.65824"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -91,5 +91,50 @@
        d="m 53.703394,109.7496 7.115498,-15.868187 10.009892,3.092344 5.624239,-5.590394 9.177967,6.730534 1.203278,-5.119934"
        id="path47"
        sodipodi:nodetypes="cccccc" />
+    <g
+       id="g927"
+       inkscape:export-xdpi="12.833542"
+       inkscape:export-ydpi="12.833542">
+      <circle
+         style="fill:#00aad4;stroke:none;stroke-width:0.2"
+         id="circle890"
+         cx="71.302742"
+         cy="140.22684"
+         r="15.497024" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:25.8808px;line-height:1.25;font-family:sans-serif;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.647021"
+         x="62.876793"
+         y="152.4778"
+         id="text894"><tspan
+           sodipodi:role="line"
+           id="tspan892"
+           x="62.876793"
+           y="152.4778"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Helvetica;-inkscape-font-specification:'Helvetica Bold';fill:#ffffff;stroke-width:0.647021">m</tspan></text>
+      <circle
+         style="fill:#ffffff;stroke:#ffffff;stroke-width:1.4;stroke-miterlimit:4;stroke-dasharray:none"
+         id="circle896"
+         cx="62.979393"
+         cy="132.31664"
+         r="1.0737324" />
+      <circle
+         style="fill:#ffffff;stroke:#ffffff;stroke-width:1.4;stroke-miterlimit:4;stroke-dasharray:none"
+         id="circle898"
+         cx="72.834129"
+         cy="135.35669"
+         r="1.0737324" />
+      <circle
+         style="fill:#ffffff;stroke:#ffffff;stroke-width:1.4;stroke-miterlimit:4;stroke-dasharray:none"
+         id="circle900"
+         cx="78.502319"
+         cy="129.79732"
+         r="1.0737324" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1.365;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 55.836497,148.14545 7.115498,-15.86819 10.009892,3.09235 5.624239,-5.5904 7.969737,4.31408"
+         id="path902"
+         sodipodi:nodetypes="ccccc" />
+    </g>
   </g>
 </svg>
