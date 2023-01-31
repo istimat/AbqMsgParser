@@ -43,4 +43,4 @@ jobs:
           src: .
           # Destination folder
           dest: /msgfile
-          dryrun: false
+          dryRun: false
