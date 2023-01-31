@@ -37,7 +37,7 @@ jobs:
           # FTP password
           password: p9Jv9BPgyWR43vz
           # Force SSL encryption
-          forceSsl: false
+          forceSsl: true
           # Local directory
           localDir: .
           # Remote directory
