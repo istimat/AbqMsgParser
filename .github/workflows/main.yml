@@ -31,14 +31,14 @@ jobs:
         uses: sebastianpopp/ftp-action@v2.0.0
         with:
           # FTP host
-          host: ftpupload.net
+          host: home498556690.1and1-data.host
           # FTP user
-          user: epiz_30464762
+          user: u1243652170
           # FTP password
-          password: vDjku8vsU8EiNar
+          password: p9Jv9BPgyWR43vz
           # Force SSL encryption
           forceSsl: false
           # Local directory
           localDir: .
           # Remote directory
-          remoteDir: /htdocs
+          remoteDir: /msgfile
