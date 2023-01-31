@@ -26,21 +26,19 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: FTP Uploader
-        # You may pin to the exact commit or the version.
-        # uses: zinh/ftp-uploader-action@10d256274547c8b84848edf454bfeb0b8a451c41
-        uses: zinh/ftp-uploader-action@v0.4
+      - name: FTP Deployment
+  # You may pin to the exact commit or the version.
+  # uses: airvzxf/ftp-deployment-action@9efe025c218094bd451a0cb684d7cb471f4d9d4f
+        uses: airvzxf/ftp-deployment-action@latest
         with:
-          # Hostname of ftp server, eg: ftpHostname: ftp.test
-          ftpHostname: home498556690.1and1-data.host
-          # User of ftp account
-          ftpUsername: u1243652170
-          # Password of ftp account
-          ftpPassword: p9Jv9BPgyWR43vz
-          # List files to upload to ftp server
-          files: "*"
-          # Source folder
-          src: .
-          # Destination folder
-          dest: /msgfile
-          dryRun: false
+          # FTP Server.
+          server: home498556690.1and1-data.host
+          # FTP User.
+          user: u1243652170
+          # FTP Password.
+          password: p9Jv9BPgyWR43vz
+          # Remote directory.
+          remote_dir: ./msgfile
+          # Delete all the files inside of the remote directory.
+          delete: false
+    
