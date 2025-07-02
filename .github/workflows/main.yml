@@ -32,11 +32,11 @@ jobs:
         uses: airvzxf/ftp-deployment-action@latest
         with:
           # FTP Server.
-          server: home498556690.1and1-data.host
+          server: 
           # FTP User.
-          user: u1243652170
+          user:
           # FTP Password.
-          password: p9Jv9BPgyWR43vz
+          password: 
           # Remote directory.
           remote_dir: ./msgfile
           # Delete all the files inside of the remote directory.
